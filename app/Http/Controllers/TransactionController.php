@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Recipe;
+use Auth;
+use JWTAuth;
+use App\Models\Transaction;
+use Validator;
 
-class RecipeController extends Controller
+class TransactionController extends Controller
 {
+
+    protected $transactions;
+    public function __construct(Transaction $transactions){
+        $this->transactions = $transactions;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return Recipe::all();
+        //
     }
 
     /**
@@ -23,8 +31,7 @@ class RecipeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    { 
-        //
+    {
     }
 
     /**
@@ -35,7 +42,28 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'quantity' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+        ];
+        $validator = Validator::make($request->toArray(), $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }
+
+        $newTrans = [
+            'quantity' => $request->quantity,
+            'address' => $request->address,
+            'total_price' => $request->total_price,
+            'payment' => $request->payment,
+            'user_id' => $request->user_id,
+            'recipe_id' => $request->recipe_id,
+            'phone' => $request->phone,
+        ];
+            $newTrans = $this->transactions->create($newTrans);
+
+            return $newTrans;
     }
 
     /**
@@ -46,15 +74,7 @@ class RecipeController extends Controller
      */
     public function show($id)
     {
-        //pas di click
-        $recipe = Recipe::find($id);
-        $result = array();
-        $recipe->chef;
-        $recipe->ingredients;
-        $recipe->instructions;
-        
-        $result['recipe'] = $recipe;
-        return $result;
+        //
     }
 
     /**

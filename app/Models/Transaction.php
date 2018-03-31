@@ -8,7 +8,7 @@ class Transaction extends Model
 {
     public $timestamps = false;
     protected $table = 'transactions';
-    protected $fillable = ['user_id', 'recpie_id', 'address', 'phone', 'total_price', 'quantity', 'payment', '
+    protected $fillable = ['user_id', 'recipe_id', 'address', 'phone', 'total_price', 'quantity', 'payment', '
     time'];
     protected $guarded = [];
 

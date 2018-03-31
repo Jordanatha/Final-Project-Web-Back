@@ -20,7 +20,7 @@ Route::resource('recipe', 'RecipeController');
 
 Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('logout', 'AuthController@logout');
-    //Route::post('buy', 'Transaction');
+    Route::resource('buy', 'TransactionController');
 });
 
 /*

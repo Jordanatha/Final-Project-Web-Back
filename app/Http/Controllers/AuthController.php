@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 use JWTAuth;
+use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
 use Illuminate\Support\Facades\Password;
@@ -19,7 +20,8 @@ class AuthController extends Controller
         
         $rules = [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users'
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required',
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -29,13 +31,17 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
         
+        //return response()->json(Hash::make($password));
         $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
+        return User::all();
+        die();
 
-        return response()->json(['success'=> true, 'message'=> 'Thanks for signing up.']);
+        //return response()->json(['success'=> true, 'message'=> 'Thanks for signing up.']);
     }
 
     public function login(Request $request)
-    {
+    {   
+
         $credentials = $request->only('email', 'password');
         //$credentials['password'] = Hash::make($credentials['password']);
         $rules = [
@@ -54,7 +60,11 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
         }
-        return response()->json(['success' => true, 'data'=> [ 'token' => $token ]]);
+
+        $user = Auth::user();
+        // $user = JWTAuth::parseToken()->authenticate();
+
+        return response()->json(['success' => true, 'data'=> [ 'token' => $token, 'user' => $user ]]);
     }
 
     public function logout(Request $request) {
