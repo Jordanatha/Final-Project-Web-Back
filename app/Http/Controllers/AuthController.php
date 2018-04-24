@@ -33,10 +33,8 @@ class AuthController extends Controller
         
         //return response()->json(Hash::make($password));
         $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
-        return User::all();
-        die();
 
-        //return response()->json(['success'=> true, 'message'=> 'Thanks for signing up.']);
+        return response()->json(['success'=> true, 'message'=> 'Thanks for signing up.']);
     }
 
     public function login(Request $request)

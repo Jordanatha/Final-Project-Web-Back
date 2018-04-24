@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
-Route::resource('food', 'foodController');
+//Route::resource('food', 'foodController');
 Route::resource('recipe', 'RecipeController');
 
 Route::group(['middleware' => ['jwt.auth']], function() {
